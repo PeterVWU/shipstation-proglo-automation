@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.5
+// @version      1.0.6
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -133,7 +133,6 @@
     function fillFormWithOrderDetails(orderDetails) {
         function setNativeValue(elementid, value) {
             const element = document.getElementById(elementid);
-            console.log('elementid',elementid)
             const valueSetter = Object.getOwnPropertyDescriptor(element, 'value').set;
             const prototype = Object.getPrototypeOf(element);
             const prototypeValueSetter = Object.getOwnPropertyDescriptor(prototype, 'value').set;
