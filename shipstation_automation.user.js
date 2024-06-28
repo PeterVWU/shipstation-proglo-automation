@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      2024-06-28
-// @description  try to take over the world!
-// @author       You
+// @version      1.0.1
+// @description  Automate shipstation Proglo workflow
+// @author       Peter Chen
 // @match        https://progloshipping.com/*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @updateURL    https://raw.githubusercontent.com/PeterVWU/shipstation-proglo-automation/main/shipstation_automation.user.js
