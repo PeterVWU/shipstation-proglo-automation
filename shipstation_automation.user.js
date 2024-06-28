@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.4
+// @version      1.0.5
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -236,14 +236,14 @@
             alert('Please enter a tracking number.');
         }
     });
-    
+
     trackingInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             const trackingNumber = trackingInput.value.trim();
             if (trackingNumber) {
                 closeOrderWithTrackingNumber(trackingNumber);
             } else {
-                status.textContent = 'Please enter a tracking number.';
+                status.textContent = 'Please enter a tracking number. ';
             }
         }
     });
