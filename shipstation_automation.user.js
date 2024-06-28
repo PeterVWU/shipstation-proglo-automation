@@ -38,7 +38,6 @@
     const input = document.createElement('input');
     input.type = 'text';
     input.placeholder = 'Enter Order Number';
-    input.style.marginRight = '10px';
     input.style.padding = '5px';
     input.style.fontSize = '14px';
     input.style.border = '1px solid #ccc';
