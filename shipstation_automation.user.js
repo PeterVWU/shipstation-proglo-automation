@@ -131,25 +131,53 @@
 
     // Function to fill the form with order details
     function fillFormWithOrderDetails(orderDetails) {
+        function setNativeValue(elementid, value) {
+            const element = document.getElementById(elementid);
+            console.log('elementid',elementid)
+            const valueSetter = Object.getOwnPropertyDescriptor(element, 'value').set;
+            const prototype = Object.getPrototypeOf(element);
+            const prototypeValueSetter = Object.getOwnPropertyDescriptor(prototype, 'value').set;
+          
+            if (valueSetter && valueSetter !== prototypeValueSetter) {
+              prototypeValueSetter.call(element, value);
+            } else {
+              valueSetter.call(element, value);
+            }
+            element.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+
+          function setSelectValue(id, value) {
+            const select = document.getElementById(id);
+            if (select) {
+                for (const option of select.options) {
+                    if (option.value === value) {
+                        select.value = value;
+                        select.dispatchEvent(new Event('change', { bubbles: true }));
+                        break;
+                    }
+                }
+            }
+        }
         console.log("fillFormWithOrderDetails")
+        setNativeValue('FromName','Return Address')
+        setNativeValue('FromCompany','Fulfillment Center')
+        setNativeValue('FromStreet','3395 S Jones Blvd PMB #180')
+        setNativeValue('FromCity','Las Vegas')
+        setSelectValue('FromState','NV')
+        setNativeValue('FromZip','89147')
+        setNativeValue('FromCountry','USA')
+        setNativeValue('FromPhone','8005008486')
         // Fill "mail from" form with dummy data
-        document.getElementById('FromName').value = 'Return Address';
-        document.getElementById('FromCompany').value = 'Fulfillment Center';
-        document.getElementById('FromStreet').value = '3395 S Jones Blvd PMB #180';
-        document.getElementById('FromCity').value = 'Las Vegas';
-        document.getElementById('FromState').value = 'NV';
-        document.getElementById('FromZip').value = '89147';
-        document.getElementById('FromCountry').value = 'USA';
-        document.getElementById('FromPhone').value = '8005008486';
 
         // Fill "mail to" form with order data
-        document.getElementById('ToName').value = orderDetails.shipTo.name;
-        document.getElementById('ToStreet').value = orderDetails.shipTo.street1;
-        document.getElementById('ToStreet2').value = orderDetails.shipTo.street2;
-        document.getElementById('ToCity').value = orderDetails.shipTo.city;
-        document.getElementById('ToState').value = orderDetails.shipTo.state;
-        document.getElementById('ToZip').value = orderDetails.shipTo.postalCode;
-        document.getElementById('ToCountry').value = orderDetails.shipTo.country;
+        setNativeValue('ToName',orderDetails.shipTo.name)
+        setNativeValue('ToStreet',orderDetails.shipTo.street1)
+        setNativeValue('ToStreet2',orderDetails.shipTo.street2)
+        setNativeValue('ToCity',orderDetails.shipTo.city)
+        setSelectValue('ToState',orderDetails.shipTo.state)
+        setNativeValue('ToZip',orderDetails.shipTo.postalCode)
+        setNativeValue('ToCountry',orderDetails.shipTo.country)
+        setNativeValue('ToPhone',orderDetails.shipTo.phone)
 
         // Scroll to the bottom of the page
         window.scrollTo(0, document.body.scrollHeight);
@@ -185,6 +213,7 @@
             },
             body: JSON.stringify({
                 orderId: orderDetails.orderId,
+                carrierCode: "usps",
                 trackingNumber: cleanedTrackingNumber
             })
         })
