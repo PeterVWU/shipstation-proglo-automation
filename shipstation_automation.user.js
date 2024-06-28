@@ -6,8 +6,8 @@
 // @author       You
 // @match        https://progloshipping.com/*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
-// @updateURL    https://raw.githubusercontent.com/PeterVWU/shipstation-proglo-automation/main/main.js
-// @downloadURL  https://raw.githubusercontent.com/PeterVWU/shipstation-proglo-automation/main/main.js
+// @updateURL    https://raw.githubusercontent.com/PeterVWU/shipstation-proglo-automation/main/shipstation_automation.user.js
+// @downloadURL  https://raw.githubusercontent.com/PeterVWU/shipstation-proglo-automation/main/shipstation_automation.user.js
 // @grant        GM_addStyle
 // @grant        GM_setValue
 // @grant        GM_getValue
