@@ -6,6 +6,8 @@
 // @author       You
 // @match        https://progloshipping.com/*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
+// @updateURL    https://raw.githubusercontent.com/PeterVWU/shipstation-proglo-automation/main/main.js
+// @downloadURL  https://raw.githubusercontent.com/PeterVWU/shipstation-proglo-automation/main/main.js
 // @grant        GM_addStyle
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -45,7 +47,7 @@
 
     // Create a button to fetch the order
     const button = document.createElement('button');
-    button.textContent = 'Fetch Order';
+    button.textContent = 'Get Order';
     button.style.padding = '5px 10px';
     button.style.fontSize = '14px';
     button.style.border = 'none';
