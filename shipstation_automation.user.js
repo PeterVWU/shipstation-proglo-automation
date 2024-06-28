@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.1
+// @version      1.0.2
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -39,7 +39,7 @@
     input.type = 'text';
     input.placeholder = 'Enter Order Number';
     input.style.padding = '5px';
-    input.style.fontSize = '14px';
+    input.style.fontSize = '20px';
     input.style.border = '1px solid #ccc';
     input.style.borderRadius = '4px';
     input.style.color = 'black';
@@ -48,7 +48,7 @@
     const button = document.createElement('button');
     button.textContent = 'Get Order';
     button.style.padding = '5px 10px';
-    button.style.fontSize = '14px';
+    button.style.fontSize = '20px';
     button.style.border = 'none';
     button.style.borderRadius = '4px';
     button.style.backgroundColor = '#007BFF';
@@ -57,7 +57,7 @@
 
     // Create a status message
     const status = document.createElement('span');
-    status.style.fontSize = '14px';
+    status.style.fontSize = '20px';
     status.style.color = 'black';
 
     // Create an input field for the order number
@@ -65,7 +65,7 @@
     trackingInput.type = 'text';
     trackingInput.placeholder = 'Enter Tracking Number';
     trackingInput.style.padding = '5px';
-    trackingInput.style.fontSize = '14px';
+    trackingInput.style.fontSize = '20px';
     trackingInput.style.border = '1px solid #ccc';
     trackingInput.style.borderRadius = '4px';
     trackingInput.style.color = 'black';
@@ -73,7 +73,7 @@
     const closeButton = document.createElement('button');
     closeButton.textContent = 'Close Order';
     closeButton.style.padding = '5px 10px';
-    closeButton.style.fontSize = '14px';
+    closeButton.style.fontSize = '20px';
     closeButton.style.border = 'none';
     closeButton.style.borderRadius = '4px';
     closeButton.style.backgroundColor = '#007BFF';
