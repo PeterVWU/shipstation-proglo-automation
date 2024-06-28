@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.2
+// @version      1.0.4
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -133,12 +133,14 @@
     function fillFormWithOrderDetails(orderDetails) {
         console.log("fillFormWithOrderDetails")
         // Fill "mail from" form with dummy data
-        document.getElementById('FromName').value = 'John Doe';
-        document.getElementById('FromStreet').value = '123 Main St';
-        document.getElementById('FromCity').value = 'Anytown';
-        document.getElementById('FromState').value = 'CA';
-        document.getElementById('FromZip').value = '12345';
+        document.getElementById('FromName').value = 'Return Address';
+        document.getElementById('FromCompany').value = 'Fulfillment Center';
+        document.getElementById('FromStreet').value = '3395 S Jones Blvd PMB #180';
+        document.getElementById('FromCity').value = 'Las Vegas';
+        document.getElementById('FromState').value = 'NV';
+        document.getElementById('FromZip').value = '89147';
         document.getElementById('FromCountry').value = 'USA';
+        document.getElementById('FromPhone').value = '8005008486';
 
         // Fill "mail to" form with order data
         document.getElementById('ToName').value = orderDetails.shipTo.name;
