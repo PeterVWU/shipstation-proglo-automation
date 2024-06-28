@@ -217,6 +217,17 @@
             status.textContent = 'Please enter an order number.';
         }
     });
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const orderNumber = input.value.trim();
+            if (orderNumber) {
+                fetchOrder(orderNumber);
+            } else {
+                status.textContent = 'Please enter an order number.';
+            }
+        }
+    });
+
     closeButton.addEventListener('click', () => {
         const trackingNumber = trackingInput.value.trim();
         if (trackingNumber) {
@@ -225,6 +236,18 @@
             alert('Please enter a tracking number.');
         }
     });
+    
+    trackingInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const trackingNumber = trackingInput.value.trim();
+            if (trackingNumber) {
+                closeOrderWithTrackingNumber(trackingNumber);
+            } else {
+                status.textContent = 'Please enter a tracking number.';
+            }
+        }
+    });
+
     async function init() {
         // Check if we are on the /user/create-labels page
         if (window.location.href.includes('/user/create-labels')) {
