@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.9
+// @version      1.0.10
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -285,6 +285,11 @@
     });
 
     async function init() {
+        // show label
+        const orderDetails = GM_getValue('orderDetails', {});
+        if(orderDetails){
+            currentOrder.textContent = `Order#: ${firstOrder.orderId}`;
+        }
         // Check if we are on the /user/create-labels page
         if (window.location.href.includes('/user/create-labels')) {
             const orderDetails = GM_getValue('orderDetails', {});
