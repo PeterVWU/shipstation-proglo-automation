@@ -55,6 +55,11 @@
     button.style.color = 'white';
     button.style.cursor = 'pointer';
 
+    // Create a current order number display
+    const currentOrder = document.createElement('span');
+    status.style.fontSize = '20px';
+    status.style.color = 'blue';
+
     // Create a status message
     const status = document.createElement('span');
     status.style.fontSize = '20px';
@@ -81,6 +86,7 @@
     closeButton.style.cursor = 'pointer';
 
     // Add input, button, and status to the container
+    container.appendChild(currentOrder);
     container.appendChild(status);
     container.appendChild(input);
     container.appendChild(button);
@@ -113,6 +119,7 @@
                 // localStorage.setItem('orderDetails', JSON.stringify(firstOrder));
                 GM_setValue('orderDetails', firstOrder);
                 status.textContent = 'Order fetched successfully!';
+                currentOrder.textContent = `Order#: ${firstOrder.orderId}`;
                 if (window.location.pathname === '/user/create-labels') {
                     fillFormWithOrderDetails(firstOrder);
                 } else {
@@ -158,12 +165,12 @@
             }
         }
         console.log("fillFormWithOrderDetails")
-        setNativeValue('FromName','Return Address')
+        setNativeValue('FromName',`Return Address ${orderDetails.orderNumber}`)
         setNativeValue('FromCompany','Fulfillment Center')
         setNativeValue('FromStreet','3395 S Jones Blvd PMB #180')
         setNativeValue('FromCity','Las Vegas')
         setSelectValue('FromState','NV')
-        setNativeValue('FromZip','89147')
+        setNativeValue('FromZip','89146')
         setNativeValue('FromCountry','USA')
         setNativeValue('FromPhone','8005008486')
         // Fill "mail from" form with dummy data
@@ -203,6 +210,7 @@
 
     // Function to close the order with the tracking number
     function closeOrderWithTrackingNumber(trackingNumber) {
+        status.textContent = 'Loading...';
         const cleanedTrackingNumber = trackingNumber.replace(/\s+/g, '');
         const orderDetails = GM_getValue('orderDetails', {});
         fetch(`${shipstationProxy}/orders/markasshipped`, {
@@ -226,12 +234,10 @@
             console.log('Order closed successfully:', data);
             input.value = '';
             GM_setValue('orderDetails',{});
-            const status = document.querySelector('#status');
             status.textContent = 'Order processed successfully!';
         })
         .catch(error => {
             console.error('Error closing order:', error);
-            const status = document.querySelector('#status');
             status.textContent = 'Error processing order.';
         });
     }
@@ -261,7 +267,7 @@
         if (trackingNumber) {
             closeOrderWithTrackingNumber(trackingNumber);
         } else {
-            alert('Please enter a tracking number.');
+            status.textContent = 'Please enter a tracking number.';
         }
     });
 
@@ -271,7 +277,7 @@
             if (trackingNumber) {
                 closeOrderWithTrackingNumber(trackingNumber);
             } else {
-                status.textContent = 'Please enter a tracking number. ';
+                status.textContent = 'Please enter a tracking number.';
             }
         }
     });
