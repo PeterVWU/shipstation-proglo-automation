@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.12
+// @version      1.0.13
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -96,10 +96,10 @@
 
 
 // Function to fetch order data
-    function fetchOrder(orderNumber) {
+    async function fetchOrder(orderNumber) {
         status.textContent = 'Loading...';
 
-        fetch(`${shipstationProxy}/orders?orderNumber=${orderNumber}`, {
+        await fetch(`${shipstationProxy}/orders?orderNumber=${orderNumber}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -116,7 +116,6 @@
                 const firstOrder = data.orders[0];
                 console.log(firstOrder);
                 // Store the order details in local storage
-                // localStorage.setItem('orderDetails', JSON.stringify(firstOrder));
                 GM_setValue('orderDetails', firstOrder);
                 status.textContent = 'Order fetched successfully!';
                 currentOrder.textContent = `Order#: ${firstOrder.orderNumber}`;
@@ -198,7 +197,6 @@
         const orderDetails = GM_getValue('orderDetails', {});
         if (orderDetails) {
             const orderNumber = orderDetails.orderNumber;
-            // const orderNumber = '3430'; // test code 
             const rows = document.querySelectorAll('table tr');
             for (let row of rows) {
                 const firstColumn = row.querySelector('td');
@@ -212,11 +210,11 @@
     }
 
     // Function to close the order with the tracking number
-    function closeOrderWithTrackingNumber(trackingNumber) {
+    async function closeOrderWithTrackingNumber(trackingNumber) {
         status.textContent = 'Loading...';
         const cleanedTrackingNumber = trackingNumber.replace(/\s+/g, '');
         const orderDetails = GM_getValue('orderDetails', {});
-        fetch(`${shipstationProxy}/orders/markasshipped`, {
+        await fetch(`${shipstationProxy}/orders/markasshipped`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -233,7 +231,8 @@
             }
             return response.json();
         })
-        .then(data => {
+        .then(async data => {
+            await recordClosedOrder(orderDetails)
             console.log('Order closed successfully:', data);
             input.value = '';
             trackingInput.value = '';
@@ -244,6 +243,28 @@
         .catch(error => {
             console.error('Error closing order:', error);
             status.textContent = 'Error processing order.';
+        });
+    }
+
+    // Function to record closed orders with timestamps
+    async function recordClosedOrder(orderData) {
+        const orderNumber = orderData.orderNumber;
+        const timestamp = new Date().toISOString();
+        const scriptURL = 'https://googlesheet-record-close-order.info-ba2.workers.dev/';
+
+        await fetch(scriptURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ orderNumber, timestamp }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Order recorded successfully:', data);
+        })
+        .catch(error => {
+            console.error('Error recording order:', error);
         });
     }
 
