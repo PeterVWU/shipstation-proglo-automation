@@ -285,11 +285,6 @@
     });
 
     async function init() {
-        // show label
-        const orderDetails = GM_getValue('orderDetails', {});
-        if(orderDetails){
-            currentOrder.textContent = `Order#: ${firstOrder.orderId}`;
-        }
         // Check if we are on the /user/create-labels page
         if (window.location.href.includes('/user/create-labels')) {
             const orderDetails = GM_getValue('orderDetails', {});
