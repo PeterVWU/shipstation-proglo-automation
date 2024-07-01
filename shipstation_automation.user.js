@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.11
+// @version      1.0.12
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -119,7 +119,7 @@
                 // localStorage.setItem('orderDetails', JSON.stringify(firstOrder));
                 GM_setValue('orderDetails', firstOrder);
                 status.textContent = 'Order fetched successfully!';
-                currentOrder.textContent = `Order#: ${firstOrder.orderId}`;
+                currentOrder.textContent = `Order#: ${firstOrder.orderNumber}`;
                 if (window.location.pathname === '/user/create-labels') {
                     fillFormWithOrderDetails(firstOrder);
                 } else {
@@ -177,6 +177,9 @@
 
         // Fill "mail to" form with order data
         setNativeValue('ToName',orderDetails.shipTo.name)
+        if(orderDetails.shipTo.company){
+            setNativeValue('ToCompany',orderDetails.shipTo.company)
+        }
         setNativeValue('ToStreet',orderDetails.shipTo.street1)
         setNativeValue('ToStreet2',orderDetails.shipTo.street2)
         setNativeValue('ToCity',orderDetails.shipTo.city)
@@ -285,9 +288,12 @@
     });
 
     async function init() {
+        const orderDetails = GM_getValue('orderDetails', {});
+        if(orderDetails){
+            currentOrder.textContent = `Order#: ${orderDetails.orderNumber}`;
+        }
         // Check if we are on the /user/create-labels page
         if (window.location.href.includes('/user/create-labels')) {
-            const orderDetails = GM_getValue('orderDetails', {});
             console.log('orderDetails',orderDetails)
             if (orderDetails) {
                 await new Promise(resolve => setTimeout(resolve, 1000));
