@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.7
+// @version      1.0.8
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -57,8 +57,8 @@
 
     // Create a current order number display
     const currentOrder = document.createElement('span');
-    status.style.fontSize = '20px';
-    status.style.color = 'blue';
+    currentOrder.style.fontSize = '20px';
+    currentOrder.style.color = 'blue';
 
     // Create a status message
     const status = document.createElement('span');
@@ -233,8 +233,10 @@
         .then(data => {
             console.log('Order closed successfully:', data);
             input.value = '';
+            trackingInput.value = '';
             GM_setValue('orderDetails',{});
             status.textContent = 'Order processed successfully!';
+            currentOrder.textContent = `Order#: N/A`;
         })
         .catch(error => {
             console.error('Error closing order:', error);
