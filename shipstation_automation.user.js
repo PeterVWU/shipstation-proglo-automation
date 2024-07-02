@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.13
+// @version      1.0.14
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -118,7 +118,14 @@
                 // Store the order details in local storage
                 GM_setValue('orderDetails', firstOrder);
                 status.textContent = 'Order fetched successfully!';
-                currentOrder.textContent = `Order#: ${firstOrder.orderNumber}`;
+                if(firstOrder.orderStatus === 'shipped') {
+                    currentOrder.textContent = `Order#: ${firstOrder.orderNumber} shipped`;
+                    currentOrder.style.color = 'red';
+                    return;
+                } else {
+                    currentOrder.textContent = `Order#: ${firstOrder.orderNumber}`;
+                    currentOrder.style.color = 'blue';
+                }
                 if (window.location.pathname === '/user/create-labels') {
                     fillFormWithOrderDetails(firstOrder);
                 } else {
