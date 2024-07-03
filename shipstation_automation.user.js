@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.14
+// @version      1.0.15
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -229,7 +229,9 @@
             body: JSON.stringify({
                 orderId: orderDetails.orderId,
                 carrierCode: "usps",
-                trackingNumber: cleanedTrackingNumber
+                trackingNumber: cleanedTrackingNumber,
+                notifyCustomer: true,
+                notifySalesChannel: true
             })
         })
         .then(response => {
