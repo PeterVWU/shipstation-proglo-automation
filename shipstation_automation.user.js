@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.15
+// @version      1.0.16
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -85,6 +85,16 @@
     closeButton.style.color = 'white';
     closeButton.style.cursor = 'pointer';
 
+    // const testBtn = document.createElement('button');
+    // testBtn.textContent = 'test';
+    // testBtn.style.padding = '5px 10px';
+    // testBtn.style.fontSize = '20px';
+    // testBtn.style.border = 'none';
+    // testBtn.style.borderRadius = '4px';
+    // testBtn.style.backgroundColor = '#007BFF';
+    // testBtn.style.color = 'white';
+    // testBtn.style.cursor = 'pointer';
+
     // Add input, button, and status to the container
     container.appendChild(currentOrder);
     container.appendChild(status);
@@ -92,6 +102,7 @@
     container.appendChild(button);
     container.appendChild(trackingInput);
     container.appendChild(closeButton);
+    // container.appendChild(testBtn);
     document.body.appendChild(container);
 
 
@@ -259,7 +270,7 @@
     async function recordClosedOrder(orderData) {
         const orderNumber = orderData.orderNumber;
         const timestamp = new Date().toISOString();
-        const scriptURL = 'https://googlesheet-record-close-order.info-ba2.workers.dev/';
+        const scriptURL = 'https://shipstation.limitlessdigitaltech.com/api/fulfillments';
 
         await fetch(scriptURL, {
             method: 'POST',
@@ -305,6 +316,9 @@
             status.textContent = 'Please enter a tracking number.';
         }
     });
+    // testBtn.addEventListener('click', () => {
+    //     recordClosedOrder({orderNumber: 'test123'})
+    // });
 
     trackingInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
