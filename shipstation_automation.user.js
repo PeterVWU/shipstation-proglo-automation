@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.16
+// @version      1.0.17
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -252,7 +252,6 @@
             return response.json();
         })
         .then(async data => {
-            await recordClosedOrder(orderDetails)
             console.log('Order closed successfully:', data);
             input.value = '';
             trackingInput.value = '';
