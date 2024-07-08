@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.17
+// @version      1.0.18
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -85,15 +85,15 @@
     closeButton.style.color = 'white';
     closeButton.style.cursor = 'pointer';
 
-    // const testBtn = document.createElement('button');
-    // testBtn.textContent = 'test';
-    // testBtn.style.padding = '5px 10px';
-    // testBtn.style.fontSize = '20px';
-    // testBtn.style.border = 'none';
-    // testBtn.style.borderRadius = '4px';
-    // testBtn.style.backgroundColor = '#007BFF';
-    // testBtn.style.color = 'white';
-    // testBtn.style.cursor = 'pointer';
+    const testBtn = document.createElement('button');
+    testBtn.textContent = 'test';
+    testBtn.style.padding = '5px 10px';
+    testBtn.style.fontSize = '20px';
+    testBtn.style.border = 'none';
+    testBtn.style.borderRadius = '4px';
+    testBtn.style.backgroundColor = '#007BFF';
+    testBtn.style.color = 'white';
+    testBtn.style.cursor = 'pointer';
 
     // Add input, button, and status to the container
     container.appendChild(currentOrder);
@@ -227,6 +227,65 @@
         }
     }
 
+    // Function to create and populate the dropdown
+    function createUserDropdown(options) {
+        const dropdown = document.createElement('select');
+        dropdown.id = 'userDropdown';
+
+        options.forEach((option, index) => {
+            const optionElement = document.createElement('option');
+            optionElement.value = option.userId;
+            optionElement.text = option.name;
+            dropdown.appendChild(optionElement);
+        });
+
+        // Set the stored value, if any
+        const selectedUser = GM_getValue("selectedUser");
+        if (selectedUser !== undefined) {
+            dropdown.value = selectedUser;
+        }
+
+        dropdown.addEventListener('change', function() {
+            let selectedUser = this.value;
+            console.log('Selected value:', selectedUser);
+            GM_setValue('selectedUser', selectedUser);
+        });
+
+        dropdown.style.padding = '5px';
+        dropdown.style.fontSize = '20px';
+        dropdown.style.border = '1px solid #ccc';
+        dropdown.style.borderRadius = '4px';
+        dropdown.style.color = 'black';
+
+        container.appendChild(dropdown);
+    }
+
+    async function getAllUers() {
+        await fetch(`${shipstationProxy}/users`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.length > 0) {
+                createUserDropdown(data);
+            } else {
+                console.log('no user found')
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching users:', error);
+            status.textContent = 'Error fetching users.';
+        });
+    }
+
     // Function to close the order with the tracking number
     async function closeOrderWithTrackingNumber(trackingNumber) {
         status.textContent = 'Loading...';
@@ -252,6 +311,7 @@
             return response.json();
         })
         .then(async data => {
+            await assignUserToOrder();
             console.log('Order closed successfully:', data);
             input.value = '';
             trackingInput.value = '';
@@ -265,25 +325,32 @@
         });
     }
 
-    // Function to record closed orders with timestamps
-    async function recordClosedOrder(orderData) {
-        const orderNumber = orderData.orderNumber;
-        const timestamp = new Date().toISOString();
-        const scriptURL = 'https://shipstation.limitlessdigitaltech.com/api/fulfillments';
-
-        await fetch(scriptURL, {
+    // assign user to order
+    async function assignUserToOrder() {
+        const orderDetails = GM_getValue('orderDetails', {});
+        const selectedUser = GM_getValue("selectedUser");
+        await fetch(`${shipstationProxy}/orders/assignuser`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ orderNumber, timestamp }),
+            body: JSON.stringify({
+                orderIds: [orderDetails.orderId],
+                userId: selectedUser
+            })
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Order recorded successfully:', data);
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(async data => {
+            console.log('Assign user to order successfully:', data);
         })
         .catch(error => {
-            console.error('Error recording order:', error);
+            console.error('Error assign user to order:', error);
+            status.textContent = 'Error assign user to order.';
         });
     }
 
@@ -316,7 +383,7 @@
         }
     });
     // testBtn.addEventListener('click', () => {
-    //     recordClosedOrder({orderNumber: 'test123'})
+    //     assignUserToOrder()
     // });
 
     trackingInput.addEventListener('keydown', (e) => {
@@ -335,6 +402,9 @@
         if(orderDetails){
             currentOrder.textContent = `Order#: ${orderDetails.orderNumber}`;
         }
+        // Get all users
+        await getAllUers();
+
         // Check if we are on the /user/create-labels page
         if (window.location.href.includes('/user/create-labels')) {
             console.log('orderDetails',orderDetails)
