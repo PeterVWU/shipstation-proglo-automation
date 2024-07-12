@@ -183,7 +183,7 @@
         }
         console.log("fillFormWithOrderDetails")
         setNativeValue('FromName',`Return Address ${orderDetails.orderNumber}`)
-        setNativeValue('FromCompany','VWU LLC')
+        setNativeValue('FromCompany','UPS Store')
         setNativeValue('FromStreet','3395 S Jones Blvd PMB #180')
         setNativeValue('FromCity','Las Vegas')
         setSelectValue('FromState','NV')
