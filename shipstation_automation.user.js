@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shipstation proglo automation
 // @namespace    http://tampermonkey.net/
-// @version      1.0.19
+// @version      1.0.20
 // @description  Automate shipstation Proglo workflow
 // @author       Peter Chen
 // @match        https://progloshipping.com/*
@@ -184,7 +184,7 @@
         console.log("fillFormWithOrderDetails")
         setNativeValue('FromName',`Return Address ${orderDetails.orderNumber}`)
         setNativeValue('FromCompany','UPS Store')
-        setNativeValue('FromStreet','3395 S Jones Blvd PMB #180')
+        setNativeValue('FromStreet1','3395 S Jones Blvd PMB #180')
         setNativeValue('FromCity','Las Vegas')
         setSelectValue('FromState','NV')
         setNativeValue('FromZip','89146')
@@ -197,7 +197,7 @@
         if(orderDetails.shipTo.company){
             setNativeValue('ToCompany',orderDetails.shipTo.company)
         }
-        setNativeValue('ToStreet',orderDetails.shipTo.street1)
+        setNativeValue('ToStreet1',orderDetails.shipTo.street1)
         setNativeValue('ToStreet2',orderDetails.shipTo.street2)
         setNativeValue('ToCity',orderDetails.shipTo.city)
         setSelectValue('ToState',orderDetails.shipTo.state)
